@@ -5,7 +5,7 @@
     <title>Datos personales</title>
 </head>
 <body>
-<form id="datos-personales" action="datos1" method="post" >
+<form id="datos-personales" action="datos1" method="post" th:object="${sesion}">
     <fieldset>
         <legend th:text="#{datosPersonales}"/>
     <label class="titulo" th:text="#{etiqueta_nombre}+':'"/>
