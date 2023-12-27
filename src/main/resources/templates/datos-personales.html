@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos personales</title>
+</head>
+<body>
+<form id="datos-personales" action="datos1" method="post" >
+    <fieldset>
+        <legend th:text="#{datosPersonales}"/>
+    <label class="titulo" th:text="#{etiqueta_nombre}+':'"/>
+    <input type="text" id="usuario" name="usuario" />
+
+   <!-- <th:block th:each="error : ${#fields.errors('nombre')}">
+        <div th:text="${error}" class="error"/>
+    </th:block>-->
+
+    <label class="titulo" th:text="#{etiqueta_apellidos}+':'"/>
+    <input type="text" id="clave" name="usuario" />
+    <br />
+    <!-- <th:block th:each="error : ${#fields.errors('nombre')}">
+         <div th:text="${error}" class="error"/>
+     </th:block> -->
+
+    <label class="titulo" th:text="#{etiqueta_fechaNacimiento}+':'"/>
+    <input type="text" id="fechaNacimiento" name="usuario" />
+    <br />
+    <label class="titulo" th:text="#{etiqueta_generoSeleccionado}+':'"/>
+    <th:block th:each="genero : ${generos}">
+        <input type="radio" th:field="*{generoSeleccionado}" th:value="${genero.key}" th:checked="${genero.key==generos}">
+        <label th:text="${genero.value.toUpperCase()}"></label><br>
+    </th:block>
+
+     <input type="submit" value="Enviar">
+    </fieldset>
+ </form>
+ </body>
+ </html>
