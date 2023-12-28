@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Datos personales</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosBasicos.css}" />
 </head>
 <body>
 <form id="datos-personales" action="datos1" method="post" th:object="${sesion}">
@@ -25,13 +26,29 @@
     <label class="titulo" th:text="#{etiqueta_fechaNacimiento}+':'"/>
     <input type="text" id="fechaNacimiento" name="usuario" />
     <br />
-    <label class="titulo" th:text="#{etiqueta_generoSeleccionado}+':'"/>
-    <th:block th:each="genero : ${generos}">
-        <input type="radio" th:field="*{generoSeleccionado}" th:value="${genero.key}" th:checked="${genero.key==generos}">
-        <label th:text="${genero.value.toUpperCase()}"></label><br>
-    </th:block>
 
-     <input type="submit" value="Enviar">
+    <label class="titulo" th:text="#{etiqueta_genero}+':'"/>
+    <th:block th:each="genero : ${generos}">
+        <input type="radio" id="genero" name="genero" th:value="${genero.key}" th:checked="${genero.key==generos}">
+        <label th:text="${genero.value}"></label>
+    </th:block>
+    <br />
+
+    <th:block th:each="extra : ${extras}">
+
+        <label th:text="${extra.value}"></label>
+        <input type="checkbox" id="extra" name="extra" th:value="${extra.key}" th:checked="${#lists.contains(extras, extra.key)}">
+    </th:block>
+    <br />
+    <label class="titulo" th:text="#{etiqueta_nacionalidades} "/>
+    <select id="nacionalidades" name="nacionalidades" multiple="multiple">
+        <option name="opcionNacionalidad" th:each="nacionalidad : ${nacionalidades}" th:value="${nacionalidad.key}" >
+            <th:block th:text="${nacionalidad.value}" />
+        </option>
+    </select>
+
+    <br />
+    <input type="submit" th:value="#{etiqueta_botonEnviar}">
     </fieldset>
  </form>
  </body>
