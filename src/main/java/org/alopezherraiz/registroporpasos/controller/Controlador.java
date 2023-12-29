@@ -1,15 +1,15 @@
 package org.alopezherraiz.registroporpasos.controller;
 
-import ch.qos.logback.core.model.Model;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-
 import org.alopezherraiz.registroporpasos.configuration.Sesion;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -31,12 +31,13 @@ public class Controlador {
     }
 
     @GetMapping("datos1")
-    public String datosPersonales(Sesion datos, HttpSession sesion){
+    public String datosPersonales(Model modelo, @ModelAttribute("datos") Sesion datos, HttpSession sesion){
+        datos.setNombre("Pepe");
         return "datospersonales";
     }
     @PostMapping("datos1")
-    public String datosPersonalesPost(Sesion datos, HttpSession sesion){
-       // sesion.setAttribute("apellidos", datos.setApellidos(sesion.getAttribute("apellidos")));
+    public String datosPersonalesPost(Model modelo, @Valid @ModelAttribute("datos") Sesion datos, HttpSession sesion){
+
         return "redirect:/datos1";
     }
     @GetMapping("datos2")
