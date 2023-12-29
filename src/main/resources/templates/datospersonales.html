@@ -12,24 +12,27 @@
     <label class="titulo" th:text="#{etiqueta_nombre}+':'"/>
     <input type="text" th:field="*{nombre}"/>
 
-    <th:block th:each="error : ${#fields.errors('nombre')}">
-        <div th:text="${error}" class="error"/>
-    </th:block>
+
 
     <label class="titulo" th:text="#{etiqueta_apellidos}+':'"/>
     <input type="text" th:field="*{apellidos}" />
     <br />
-    <!-- <th:block th:each="error : ${#fields.errors('nombre')}">
+
+    <th:block th:each="error : ${#fields.errors('nombre')}">
+        <div th:text="${error}" class="error"/>
+    </th:block>
+
+     <th:block th:each="error : ${#fields.errors('apellidos')}">
          <div th:text="${error}" class="error"/>
-     </th:block> -->
+     </th:block>
 
     <label class="titulo" th:text="#{etiqueta_fechaNacimiento}+':'"/>
-    <input type="text" id="fechaNacimiento" name="usuario" />
+    <input type="text" th:field="*{fechaNacimiento}" />
     <br />
 
     <label class="titulo" th:text="#{etiqueta_genero}+':'"/>
     <th:block th:each="genero : ${generos}">
-        <input type="radio" id="genero" name="genero" th:value="${genero.key}" th:checked="${genero.key==generos}">
+        <input type="radio" th:field="*{generoSeleccionado}" th:value="${genero.key}" th:checked="${genero.key==generos}">
         <label th:text="${genero.value}"></label>
     </th:block>
     <br />

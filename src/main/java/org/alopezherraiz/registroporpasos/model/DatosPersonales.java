@@ -1,4 +1,4 @@
-package org.alopezherraiz.registroporpasos.configuration;
+package org.alopezherraiz.registroporpasos.model;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
