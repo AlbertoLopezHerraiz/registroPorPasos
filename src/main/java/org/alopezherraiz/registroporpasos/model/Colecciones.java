@@ -7,6 +7,8 @@ public class Colecciones {
     private static final Map<String, String> GENEROS= new HashMap<>();
     private static final Map<String, String> EXTRAS= new HashMap<>();
     private static final Map<String, String> NACIONALIDAD= new HashMap<>();
+    private static final Map<String, String> DEPARTAMENTOS= new HashMap<>();
+
 
     static {
         GENEROS.put("F", "Femenino");
@@ -18,6 +20,10 @@ public class Colecciones {
         NACIONALIDAD.put("F", "Francesa");
         NACIONALIDAD.put("I", "Italiana");
         NACIONALIDAD.put("P", "Portuguesa");
+        DEPARTAMENTOS.put("M", "Marketing");
+        DEPARTAMENTOS.put("A", "Administración");
+        DEPARTAMENTOS.put("C", "Contabilidad");
+        DEPARTAMENTOS.put("RRHH", "Recursos Humanos");
     }
 
     public static Map<String, String> getGeneros(){
@@ -29,5 +35,7 @@ public class Colecciones {
     public static Map<String, String> getNacionalidades(){
         return NACIONALIDAD;
     }
-
+    public static Map<String, String> getDepartamentos(){
+        return DEPARTAMENTOS;
+    }
 }

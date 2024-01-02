@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos Profesionales</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosBasicos.css}" />
+</head>
+<body>
+<form id="datos-profesionales" action="datos2" method="post" th:object="${datosProfesionales}">
+    <fieldset>
+        <legend th:text="#{datosProfesionales}"/>
+        <label class="titulo" th:text="#{etiqueta_departamentoSeleccionado}+':'"/>
+        <select th:field="*{departamentoSeleccionado}">
+            <option th:each="departamento : ${departamentos}" th:value="${departamento.key}" th:selected="${departamento.key==departamentoSeleccionado}">
+                <th:block th:text="${departamento.value}"/>
+            </option>
+        </select>
+        <br />
+        <label class="titulo" th:text="#{etiqueta_salario}+':'"/>
+        <input type="text" th:field="*{salario}" />
+        <br />
+
+        <th:block th:each="error : ${#fields.errors('salario')}">
+            <div th:text="${error}" class="error"/>
+        </th:block>
+
+        <label class="titulo" th:text="#{etiqueta_comentarios}+':'"/>
+        <textarea th:field="*{comentarios}" th:placeholder="#{phComentarios}" rows="6" cols="50"></textarea>
+        <br />
+        <th:block th:each="error : ${#fields.errors('comentarios')}">
+            <div th:text="${error}" class="error"/>
+        </th:block>
+
+        <input type="submit" th:value="#{etiqueta_botonEnviar2}">
+    </fieldset>
+</form>
+</body>
+</html>

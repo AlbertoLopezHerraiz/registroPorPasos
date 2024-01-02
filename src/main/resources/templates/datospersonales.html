@@ -6,11 +6,12 @@
     <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosBasicos.css}" />
 </head>
 <body>
-<form id="datos-personales" action="datos1" method="post" th:object="${datos}">
+<form id="datos-personales" action="datos1" method="post" th:object="${datosPersonales}">
+
     <fieldset>
         <legend th:text="#{datosPersonales}"/>
     <label class="titulo" th:text="#{etiqueta_nombre}+':'"/>
-    <input type="text" th:field="*{nombre}" th:value="*{nombre}"/>
+    <input type="text" th:field="*{nombre}"/>
 
 
 
@@ -29,6 +30,9 @@
     <label class="titulo" th:text="#{etiqueta_fechaNacimiento}+':'"/>
     <input type="text" th:field="*{fechaNacimiento}" />
     <br />
+        <th:block th:each="error : ${#fields.errors('fechaNacimiento')}">
+            <div th:text="${error}" class="error"/>
+        </th:block>
 
     <label class="titulo" th:text="#{etiqueta_genero}+':'"/>
     <th:block th:each="genero : ${generos}">
@@ -36,22 +40,29 @@
         <label th:text="${genero.value}"></label>
     </th:block>
     <br />
+    <th:block th:each="error : ${#fields.errors('generoSeleccionado')}">
+        <div th:text="${error}" class="error"/>
+    </th:block>
+
 
     <th:block th:each="extra : ${extras}">
-
         <label th:text="${extra.value}"></label>
-        <input type="checkbox" id="extra" name="extra" th:value="${extra.key}" th:checked="${#lists.contains(extras, extra.key)}">
+        <input type="checkbox" th:field="*{extrasSeleccionados}" th:value="${extra.key}" th:checked="${#lists.contains(extras, extra.key)}">
     </th:block>
     <br />
     <label class="titulo" th:text="#{etiqueta_nacionalidades} "/>
-    <select id="nacionalidades" name="nacionalidades" multiple="multiple">
-        <option name="opcionNacionalidad" th:each="nacionalidad : ${nacionalidades}" th:value="${nacionalidad.key}" >
+    <select th:field="*{nacionalidadesSeleccionadas}" multiple="multiple">
+        <option name="nacionalidad" th:each="nacionalidad : ${nacionalidades}" th:value="${nacionalidad.key}" >
             <th:block th:text="${nacionalidad.value}" />
         </option>
     </select>
 
     <br />
-    <input type="submit" th:value="#{etiqueta_botonEnviar}">
+
+    <th:block th:each="error : ${#fields.errors('nacionalidadesSeleccionadas')}">
+        <div th:text="${error}" class="error"/>
+    </th:block>
+    <input type="submit" th:value="#{etiqueta_botonEnviar1}">
     </fieldset>
  </form>
  </body>
