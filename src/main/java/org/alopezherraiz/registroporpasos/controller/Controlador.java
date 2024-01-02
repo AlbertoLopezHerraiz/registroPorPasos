@@ -6,6 +6,7 @@ import org.alopezherraiz.registroporpasos.model.Sesion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -32,8 +33,12 @@ public class Controlador {
         return "datospersonales";
     }
     @PostMapping("datos1")
-    public String datosPersonalesPost(Model modelo, @Valid @ModelAttribute("datos") Sesion datos, HttpSession sesion){
+    public String datosPersonalesPost(Model modelo, @Valid @ModelAttribute("datos") Sesion datos, HttpSession sesion, BindingResult resultadoVinculacion){
+        String mensaje="";
         System.out.println(datos.getApellidos() + ", "+datos.getNombre());
+        if(resultadoVinculacion.hasErrors()){
+            modelo.addAttribute(mensaje);
+        }
         return "redirect:/datos1";
     }
     @GetMapping("datos2")

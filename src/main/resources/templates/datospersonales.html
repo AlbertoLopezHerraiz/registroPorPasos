@@ -10,7 +10,7 @@
     <fieldset>
         <legend th:text="#{datosPersonales}"/>
     <label class="titulo" th:text="#{etiqueta_nombre}+':'"/>
-    <input type="text" th:field="*{nombre}"/>
+    <input type="text" th:field="*{nombre}" th:value="*{nombre}"/>
 
 
 
