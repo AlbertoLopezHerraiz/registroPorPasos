@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Resumen</title>
 </head>
 <body>
-
+<form th:object="${sesion}">
+    <fieldset>
+        <legend th:text="#{datosPersonales}"/>
+        <label class="titulo" th:text="#{etiqueta_nombre}+':'+ *{datosPersonales.getNombre()}"/>
+    </fieldset>
+    <fieldset>
+        <legend th:text="#{datosProfesionales}"/>
+    </fieldset>
+    <fieldset>
+        <legend th:text="#{datosBancarios}"/>
+    </fieldset>
+</form>
 </body>
 </html>

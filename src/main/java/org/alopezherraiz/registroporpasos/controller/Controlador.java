@@ -64,12 +64,13 @@ public class Controlador {
     @PostMapping("datos2")
     public String datosProfesionalesPost(Model modelo,
                                          @Valid @ModelAttribute("datosProfesionales")DatosProfesionales datosProfesionales,
-                                         BindingResult resultadoVinculacion) {
+                                         BindingResult resultadoVinculacion, HttpSession sesion) {
         String mensaje = "";
         if (resultadoVinculacion.hasErrors()) {
             modelo.addAttribute(mensaje);
             return "datosprofesionales";
         }
+        sesion.setAttribute("datosProfesionales",datosProfesionales);
         return "redirect:/datos3";
     }
     @GetMapping("datos3")
@@ -81,12 +82,18 @@ public class Controlador {
     @PostMapping("datos3")
     public String datosBancariosPost(Model modelo,
                                      @Valid @ModelAttribute("datosBancarios")DatosBancarios datosBancarios,
-                                     BindingResult resultadoVinculacion) {
+                                     BindingResult resultadoVinculacion, HttpSession sesion) {
         String mensaje = "";
         if (resultadoVinculacion.hasErrors()) {
             modelo.addAttribute(mensaje);
             return "datosbancarios";
         }
+        sesion.setAttribute("datosBancarios", datosBancarios);
         return "redirect:/datos3";
+    }
+    @GetMapping("datos3")
+    public String resumen(Model modelo, HttpSession session) {
+    modelo.addAttribute("datosBancarios");
+        return "datosbancarios";
     }
 }
