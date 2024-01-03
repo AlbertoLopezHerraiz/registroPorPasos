@@ -5,14 +5,22 @@
     <title>Resumen</title>
 </head>
 <body>
-<form th:object="${sesion}">
+<form method="post" th:object="${datosPersonales}">
     <fieldset>
         <legend th:text="#{datosPersonales}"/>
-        <label class="titulo" th:text="#{etiqueta_nombre}+':'+ *{datosPersonales.getNombre()}"/>
+        <label class="titulo" th:text="#{etiqueta_nombre}+': '"/>
+        <label class="datos" th:text="*{nombre} "/>
+        <br />
+        <label class="titulo" th:text="#{etiqueta_apellidos}+': '"/>
+        <label class="datos" th:text="*{apellidos}"/>
     </fieldset>
+</form>
+<form>
     <fieldset>
         <legend th:text="#{datosProfesionales}"/>
     </fieldset>
+</form>
+<form>
     <fieldset>
         <legend th:text="#{datosBancarios}"/>
     </fieldset>
