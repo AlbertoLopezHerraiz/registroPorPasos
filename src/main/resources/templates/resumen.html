@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Resumen</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosResumen.css}" />
 </head>
 <body>
 <form method="post" th:object="${datosPersonales}">
@@ -13,16 +14,37 @@
         <br />
         <label class="titulo" th:text="#{etiqueta_apellidos}+': '"/>
         <label class="datos" th:text="*{apellidos}"/>
+        <br />
+        <label class="titulo" th:text="#{etiqueta_fechaNacimiento}+': '"/>
+        <label class="datos" th:text="*{fechaNacimiento}"/>
+        <br />
+        <label class="titulo" th:text="#{etiqueta_nacionalidades}+': '"/>
+        <label class="datos" th:each="nacionalidad : *{nacionalidadesSeleccionadas}">
+                <th:block th:text="${nacionalidad} + ' '"/>
+        </label>
+
     </fieldset>
 </form>
-<form>
+<form method="post" th:object="${datosProfesionales}">
     <fieldset>
         <legend th:text="#{datosProfesionales}"/>
+
+        <label class="titulo" th:text="#{etiqueta_departamentoSeleccionado}+': '"/>
+        <label class="datos" th:text="*{departamentoSeleccionado}"/>
+        <br />
+        <label class="titulo" th:text="#{etiqueta_salario}+': '"/>
+        <label class="datos" th:text="*{salario}"/>
+        <br />
+        <label class="titulo" th:text="#{etiqueta_comentarios}+': '"/>
+        <label class="datos" th:text="*{comentarios}"/>
+        <br />
     </fieldset>
 </form>
-<form>
+<form method="post" th:object="${datosBancarios}">
     <fieldset>
         <legend th:text="#{datosBancarios}"/>
+        <label class="titulo" th:text="#{etiqueta_cuenta}+': '"/>
+        <label class="datos" th:text="*{cuentaCorriente}"/>
     </fieldset>
 </form>
 </body>

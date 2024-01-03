@@ -11,7 +11,7 @@
         <legend th:text="#{datosProfesionales}"/>
         <label class="titulo" th:text="#{etiqueta_departamentoSeleccionado}+':'"/>
         <select th:field="*{departamentoSeleccionado}">
-            <option th:each="departamento : ${departamentos}" th:value="${departamento.key}" th:selected="${departamento.key==departamentoSeleccionado}">
+            <option th:each="departamento : ${departamentos}" th:value="${departamento.value}" th:selected="${departamento.value==departamentoSeleccionado}">
                 <th:block th:text="${departamento.value}"/>
             </option>
         </select>

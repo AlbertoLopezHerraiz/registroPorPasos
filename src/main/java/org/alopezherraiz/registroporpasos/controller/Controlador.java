@@ -83,7 +83,7 @@ public class Controlador {
     public String datosBancariosPost(Model modelo,
                                      @Valid @ModelAttribute("datosBancarios")DatosBancarios datosBancarios,
                                      BindingResult resultadoVinculacion, HttpSession sesion) {
-        System.out.println(sesion.getAttribute("datosProfesionales")+"\n -------------------- \n");
+
 
         String mensaje = "";
         if (resultadoVinculacion.hasErrors()) {
@@ -91,15 +91,16 @@ public class Controlador {
             return "datosbancarios";
         }
         sesion.setAttribute("datosBancarios", datosBancarios);
+        System.out.println(sesion.getAttribute("datosBancarios"));
         return "redirect:/resumen";
     }
     @GetMapping("resumen")
     public String resumen(Model modelo, HttpSession sesion) {
-      //  DatosPersonales datosPersonales = (DatosPersonales) sesion.getAttribute("datosPersonales");
+
         modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));
-        DatosProfesionales datosProfesionales = (DatosProfesionales) sesion.getAttribute("datosProfesionales");
-        DatosBancarios datosBancarios = (DatosBancarios) sesion.getAttribute("datosBancarios");
-        modelo.addAttribute("datosProfesionales", datosProfesionales);
+        modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));
+        modelo.addAttribute("datosBancarios", sesion.getAttribute("datosBancarios"));
+
         return "resumen";
     }
 }

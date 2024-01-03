@@ -52,7 +52,7 @@
     <br />
     <label class="titulo" th:text="#{etiqueta_nacionalidades} "/>
     <select th:field="*{nacionalidadesSeleccionadas}" multiple="multiple">
-        <option name="nacionalidad" th:each="nacionalidad : ${nacionalidades}" th:value="${nacionalidad.key}" >
+        <option name="nacionalidad" th:each="nacionalidad : ${nacionalidades}" th:value="${nacionalidad.value}" >
             <th:block th:text="${nacionalidad.value}" />
         </option>
     </select>
