@@ -6,45 +6,64 @@
     <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosResumen.css}" />
 </head>
 <body>
+<div th:insert="~{fragmentos/navbar}"></div>
 <form method="post" th:object="${datosPersonales}">
     <fieldset>
         <legend th:text="#{datosPersonales}"/>
+        <div th:if="${datosPersonales!=null}">
         <label class="titulo" th:text="#{etiqueta_nombre}+': '"/>
-        <label class="datos" th:text="*{nombre} "/>
+        <label th:if="*{nombre!=null}">
+        <span class="datos" th:text="*{nombre} "></span>
+        </label>
         <br />
         <label class="titulo" th:text="#{etiqueta_apellidos}+': '"/>
-        <label class="datos" th:text="*{apellidos}"/>
+        <label th:if="*{apellidos!=null}">
+        <span class="datos" th:text="*{apellidos} "></span>
+        </label>
         <br />
         <label class="titulo" th:text="#{etiqueta_fechaNacimiento}+': '"/>
-        <label class="datos" th:text="*{fechaNacimiento}"/>
+        <label th:if="*{fechaNacimiento!=null}">
+            <span class="datos" th:text="*{fechaNacimiento} "></span>
+        </label>
         <br />
         <label class="titulo" th:text="#{etiqueta_nacionalidades}+': '"/>
         <label class="datos" th:each="nacionalidad : *{nacionalidadesSeleccionadas}">
                 <th:block th:text="${nacionalidad} + ' '"/>
         </label>
-
+        </div>
     </fieldset>
 </form>
 <form method="post" th:object="${datosProfesionales}">
     <fieldset>
         <legend th:text="#{datosProfesionales}"/>
-
+        <div th:if="${datosProfesionales!=null}">
         <label class="titulo" th:text="#{etiqueta_departamentoSeleccionado}+': '"/>
-        <label class="datos" th:text="*{departamentoSeleccionado}"/>
+        <label th:if="*{departamentoSeleccionado!=null}">
+            <span class="datos" th:text="*{departamentoSeleccionado} "></span>
+        </label>
         <br />
         <label class="titulo" th:text="#{etiqueta_salario}+': '"/>
-        <label class="datos" th:text="*{salario}"/>
+        <label th:if="*{salario}!=null">
+            <span class="datos" th:text="*{salario} "></span>
+        </label>
         <br />
         <label class="titulo" th:text="#{etiqueta_comentarios}+': '"/>
-        <label class="datos" th:text="*{comentarios}"/>
+        <label th:if="*{comentarios!=null}">
+            <span class="datos" th:text="*{comentarios} "></span>
+        </label>
         <br />
+        </div>
     </fieldset>
 </form>
 <form method="post" th:object="${datosBancarios}">
     <fieldset>
         <legend th:text="#{datosBancarios}"/>
+        <div th:if="${datosBancarios!=null}">
         <label class="titulo" th:text="#{etiqueta_cuenta}+': '"/>
-        <label class="datos" th:text="*{cuentaCorriente}"/>
+        <label th:if="*{cuentaCorriente!=null}">
+            <span class="datos" th:text="*{cuentaCorriente} "></span>
+        </label>
+        </div>
     </fieldset>
 </form>
 </body>

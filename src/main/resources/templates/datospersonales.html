@@ -6,6 +6,7 @@
     <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosBasicos.css}" />
 </head>
 <body>
+<div th:insert="~{fragmentos/navbar}"></div>
 <form id="datos-personales" action="datos1" method="post" th:object="${datosPersonales}">
 
     <fieldset>

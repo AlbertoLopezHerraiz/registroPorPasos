@@ -6,6 +6,7 @@
     <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosBasicos.css}" />
 </head>
 <body>
+<div th:insert="~{fragmentos/navbar}"></div>
 <form id="datos-profesionales" action="datos2" method="post" th:object="${datosProfesionales}">
     <fieldset>
         <legend th:text="#{datosProfesionales}"/>

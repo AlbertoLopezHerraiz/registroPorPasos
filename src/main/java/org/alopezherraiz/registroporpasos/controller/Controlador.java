@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import org.alopezherraiz.registroporpasos.model.DatosBancarios;
 import org.alopezherraiz.registroporpasos.model.DatosPersonales;
 import org.alopezherraiz.registroporpasos.model.DatosProfesionales;
-import org.alopezherraiz.registroporpasos.model.Sesion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -38,7 +37,9 @@ public class Controlador {
         return getDepartamentos();
     }
     @GetMapping("datos1")
-    public String datosPersonales(Model modelo, @ModelAttribute("datosPersonales") DatosPersonales datosPersonales) {
+    public String datosPersonales(Model modelo, @ModelAttribute("datosPersonales") DatosPersonales datosPersonales, HttpSession sesion) {
+        if(sesion.getAttribute("datosPersonales")!=null){
+            modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));}
         return "datospersonales";
     }
 
@@ -55,9 +56,11 @@ public class Controlador {
     }
 
     @GetMapping("datos2")
-    public String datosProfesionales(@ModelAttribute("datosProfesionales") DatosProfesionales datosProfesionales) {
+    public String datosProfesionales(Model modelo, @ModelAttribute("datosProfesionales") DatosProfesionales datosProfesionales, HttpSession sesion) {
        datosProfesionales.setDepartamentoSeleccionado("M");
        datosProfesionales.setSalario(2750.00);
+        if(sesion.getAttribute("datosProfesionales")!=null){
+            modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));}
         return "datosprofesionales";
     }
 
@@ -74,8 +77,9 @@ public class Controlador {
         return "redirect:/datos3";
     }
     @GetMapping("datos3")
-    public String datosBancarios(@ModelAttribute("datosBancarios") DatosBancarios datosBancarios) {
-
+    public String datosBancarios(Model modelo, @ModelAttribute("datosBancarios") DatosBancarios datosBancarios, HttpSession sesion) {
+        if(sesion.getAttribute("datosBancarios")!=null){
+            modelo.addAttribute("datosBancarios", sesion.getAttribute("datosBancarios"));}
         return "datosbancarios";
     }
 
@@ -91,16 +95,16 @@ public class Controlador {
             return "datosbancarios";
         }
         sesion.setAttribute("datosBancarios", datosBancarios);
-        System.out.println(sesion.getAttribute("datosBancarios"));
         return "redirect:/resumen";
     }
     @GetMapping("resumen")
     public String resumen(Model modelo, HttpSession sesion) {
-
-        modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));
-        modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));
-        modelo.addAttribute("datosBancarios", sesion.getAttribute("datosBancarios"));
-
+        if(sesion.getAttribute("datosPersonales")!=null){
+            modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));}
+        if(sesion.getAttribute("datosProfesionales")!=null){
+            modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));}
+        if(sesion.getAttribute("datosBancarios")!=null){
+            modelo.addAttribute("datosBancarios", sesion.getAttribute("datosBancarios"));}
         return "resumen";
     }
 }
