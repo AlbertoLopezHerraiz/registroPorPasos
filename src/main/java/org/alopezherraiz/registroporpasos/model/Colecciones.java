@@ -10,7 +10,7 @@ public class Colecciones {
     private static final Map<String, String> NACIONALIDAD= new HashMap<>();
     private static final Map<String, String> DEPARTAMENTOS= new HashMap<>();
     private static final Map<String, String> TRATAMIENTO= new HashMap<>();
-    private static ArrayList<Usuario> usuarios= new ArrayList<Usuario>();
+    private static ArrayList<DatosUsuario> usuarios= new ArrayList<DatosUsuario>();
 
 
     static {
@@ -53,7 +53,7 @@ public class Colecciones {
     public static Map<String, String> getTratamiento(){
         return TRATAMIENTO;
     }
-    public static ArrayList<Usuario> getUsuarios(){return usuarios;}
-    public static boolean usuarioExiste(Usuario usuario){return usuarios.contains(usuario);}
-    public static void agregarUsuario(Usuario usuario){ usuarios.add(usuario);}
+    public static ArrayList<DatosUsuario> getUsuarios(){return usuarios;}
+    public static boolean usuarioExiste(DatosUsuario usuario){return usuarios.contains(usuario);}
+    public static void agregarUsuario(DatosUsuario usuario){ usuarios.add(usuario);}
 }

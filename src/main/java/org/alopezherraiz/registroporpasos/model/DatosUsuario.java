@@ -3,6 +3,7 @@ package org.alopezherraiz.registroporpasos.model;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.alopezherraiz.registroporpasos.configuration.validaciones.FieldsValueMatch;
+import org.alopezherraiz.registroporpasos.configuration.validaciones.NuevoUsuarioValido;
 
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
@@ -12,6 +13,7 @@ import org.alopezherraiz.registroporpasos.configuration.validaciones.FieldsValue
                 fieldMatch = "validarClave"
         )
 })
+@NuevoUsuarioValido
 public class DatosUsuario {
     @NotNull @NotBlank
     private String usuario;
@@ -19,4 +21,7 @@ public class DatosUsuario {
     private String clave;
     @NotEmpty
     private String validarClave;
+
+    DatosPersonales datosPersonales;
+    DatosProfesionales datosProfesionales;
 }

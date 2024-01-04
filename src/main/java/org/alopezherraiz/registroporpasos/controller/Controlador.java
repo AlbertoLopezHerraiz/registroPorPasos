@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import org.alopezherraiz.registroporpasos.model.DatosUsuario;
 import org.alopezherraiz.registroporpasos.model.DatosPersonales;
 import org.alopezherraiz.registroporpasos.model.DatosProfesionales;
-import org.alopezherraiz.registroporpasos.model.Usuario;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
