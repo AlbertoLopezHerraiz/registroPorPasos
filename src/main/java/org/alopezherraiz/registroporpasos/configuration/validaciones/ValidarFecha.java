@@ -6,15 +6,15 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.lang.annotation.Annotation;
 import java.time.LocalDate;
+import java.time.Period;
 
 public class ValidarFecha implements ConstraintValidator<ValidacionFecha, LocalDate> {
 
     @Override
     public boolean isValid(LocalDate fechaNacimiento, ConstraintValidatorContext context) {
         try {
-
-        // Verifica si la fecha de nacimiento es posterior al año 2000
-        return fechaNacimiento.isAfter(LocalDate.of(1999, 12, 31));
+        int years= Period.between(fechaNacimiento, LocalDate.now()).getYears();
+            return years >= 18;
         } catch (Exception e) {
             return false;
         }

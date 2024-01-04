@@ -13,6 +13,7 @@ import java.util.ArrayList;
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
 public class DatosPersonales {
+    private String tratamientoSeleccionado;
     @NotNull @NotBlank
     private String nombre;
     @NotNull @NotBlank

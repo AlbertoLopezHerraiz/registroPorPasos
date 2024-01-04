@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Datos de usuario</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosBasicos.css}" />
+</head>
+<body>
+<div th:insert="~{fragmentos/navbar}"></div>
+<form id="datos-usuario" action="datos1" method="post" th:object="${datosUsuario}">
+    <fieldset>
+        <legend th:text="#{datosUsuario}"/>
+
+        <label class="titulo" th:text="#{etiqueta_usuario}+':'"/>
+        <input type="text" th:field="*{usuario}" />
+        <br />
+
+        <th:block th:each="error : ${#fields.errors('usuario')}">
+            <div th:text="${error}" class="error"/>
+        </th:block>
+
+        <label class="titulo" th:text="#{etiqueta_clave}+':'"/>
+        <input type="password" th:field="*{clave}" />
+        <br />
+        <label class="titulo" th:text="#{etiqueta_claveConfirmar}+':'"/>
+        <input type="password" th:field="*{validarClave}" />
+
+        <div th:if="${#fields.hasErrors('global')}">
+        <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error"/>
+        </div>
+        <th:block th:each="error : ${#fields.errors('clave')}">
+            <div th:text="${error}" class="error"/>
+        </th:block>
+        <th:block th:each="error : ${#fields.errors('validarClave')}">
+            <div th:text="${error}" class="error"/>
+        </th:block><br/>
+        <input type="submit" th:value="#{etiqueta_botonEnviar1}">
+
+    </fieldset>
+</form>
+</body>
+</html>

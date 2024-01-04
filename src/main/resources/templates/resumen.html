@@ -7,25 +7,49 @@
 </head>
 <body>
 <div th:insert="~{fragmentos/navbar}"></div>
+<form method="post" th:object="${datosUsuario}">
+    <fieldset>
+        <legend th:text="#{datosUsuario}"/>
+        <div th:if="${datosUsuario!=null}">
+            <label class="titulo" th:text="#{etiqueta_usuario}+': '"/>
+            <label th:if="*{usuario!=null}">
+                <span class="datos" th:text="*{usuario} "></span>
+            </label><br/>
+            <label class="titulo" th:text="#{etiqueta_clave}+': '"/>
+            <label th:if="*{clave!=null}">
+                <span class="datos" th:text="*{clave} "></span>
+            </label>
+        </div>
+    </fieldset>
+</form>
 <form method="post" th:object="${datosPersonales}">
     <fieldset>
         <legend th:text="#{datosPersonales}"/>
         <div th:if="${datosPersonales!=null}">
+        <label class="titulo" th:text="#{etiqueta_tratamiento}+': '"/>
+        <label th:if="*{tratamientoSeleccionado!=null}">
+            <span class="datos" th:text="*{tratamientoSeleccionado} "></span>
+        </label>
+        <br />
+
         <label class="titulo" th:text="#{etiqueta_nombre}+': '"/>
         <label th:if="*{nombre!=null}">
         <span class="datos" th:text="*{nombre} "></span>
         </label>
         <br />
+
         <label class="titulo" th:text="#{etiqueta_apellidos}+': '"/>
         <label th:if="*{apellidos!=null}">
         <span class="datos" th:text="*{apellidos} "></span>
         </label>
         <br />
+
         <label class="titulo" th:text="#{etiqueta_fechaNacimiento}+': '"/>
         <label th:if="*{fechaNacimiento!=null}">
             <span class="datos" th:text="*{fechaNacimiento} "></span>
         </label>
         <br />
+
         <label class="titulo" th:text="#{etiqueta_nacionalidades}+': '"/>
         <label class="datos" th:each="nacionalidad : *{nacionalidadesSeleccionadas}">
                 <th:block th:text="${nacionalidad} + ' '"/>
@@ -55,16 +79,6 @@
         </div>
     </fieldset>
 </form>
-<form method="post" th:object="${datosBancarios}">
-    <fieldset>
-        <legend th:text="#{datosBancarios}"/>
-        <div th:if="${datosBancarios!=null}">
-        <label class="titulo" th:text="#{etiqueta_cuenta}+': '"/>
-        <label th:if="*{cuentaCorriente!=null}">
-            <span class="datos" th:text="*{cuentaCorriente} "></span>
-        </label>
-        </div>
-    </fieldset>
-</form>
+
 </body>
 </html>

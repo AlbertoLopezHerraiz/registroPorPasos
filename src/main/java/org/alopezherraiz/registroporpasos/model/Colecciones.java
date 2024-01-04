@@ -1,5 +1,6 @@
 package org.alopezherraiz.registroporpasos.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ public class Colecciones {
     private static final Map<String, String> EXTRAS= new HashMap<>();
     private static final Map<String, String> NACIONALIDAD= new HashMap<>();
     private static final Map<String, String> DEPARTAMENTOS= new HashMap<>();
+    private static final Map<String, String> TRATAMIENTO= new HashMap<>();
+    private static ArrayList<Usuario> usuarios= new ArrayList<Usuario>();
 
 
     static {
@@ -20,10 +23,19 @@ public class Colecciones {
         NACIONALIDAD.put("F", "Francesa");
         NACIONALIDAD.put("I", "Italiana");
         NACIONALIDAD.put("P", "Portuguesa");
-        DEPARTAMENTOS.put("M", "Marketing");
-        DEPARTAMENTOS.put("A", "Administración");
+        DEPARTAMENTOS.put("R", "Investigación");
+        DEPARTAMENTOS.put("S", "Ventas");
         DEPARTAMENTOS.put("C", "Contabilidad");
-        DEPARTAMENTOS.put("RRHH", "Recursos Humanos");
+        DEPARTAMENTOS.put("O", "Operaciones");
+        TRATAMIENTO.put("Sra.", "Señora");
+        TRATAMIENTO.put("Sr.", "Señor");
+        TRATAMIENTO.put("Srta.", "Señorita");
+        TRATAMIENTO.put("Srto.", "Señorito");
+        TRATAMIENTO.put("Caba.", "Caballera");
+        TRATAMIENTO.put("Cabo.", "Caballero");
+        TRATAMIENTO.put("Amza.", "Amazona");
+        TRATAMIENTO.put("Amzo.", "Amazono");
+
     }
 
     public static Map<String, String> getGeneros(){
@@ -38,4 +50,10 @@ public class Colecciones {
     public static Map<String, String> getDepartamentos(){
         return DEPARTAMENTOS;
     }
+    public static Map<String, String> getTratamiento(){
+        return TRATAMIENTO;
+    }
+    public static ArrayList<Usuario> getUsuarios(){return usuarios;}
+    public static boolean usuarioExiste(Usuario usuario){return usuarios.contains(usuario);}
+    public static void agregarUsuario(Usuario usuario){ usuarios.add(usuario);}
 }

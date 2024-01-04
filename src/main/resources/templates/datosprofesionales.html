@@ -7,7 +7,7 @@
 </head>
 <body>
 <div th:insert="~{fragmentos/navbar}"></div>
-<form id="datos-profesionales" action="datos2" method="post" th:object="${datosProfesionales}">
+<form id="datos-profesionales" action="datos3" method="post" th:object="${datosProfesionales}">
     <fieldset>
         <legend th:text="#{datosProfesionales}"/>
         <label class="titulo" th:text="#{etiqueta_departamentoSeleccionado}+':'"/>
@@ -32,7 +32,7 @@
             <div th:text="${error}" class="error"/>
         </th:block>
 
-        <input type="submit" th:value="#{etiqueta_botonEnviar2}">
+        <input type="submit" th:value="#{etiqueta_botonEnviar3}">
     </fieldset>
 </form>
 </body>

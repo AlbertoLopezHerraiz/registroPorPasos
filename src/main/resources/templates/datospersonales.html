@@ -7,10 +7,19 @@
 </head>
 <body>
 <div th:insert="~{fragmentos/navbar}"></div>
-<form id="datos-personales" action="datos1" method="post" th:object="${datosPersonales}">
+<form id="datos-personales" action="datos2" method="post" th:object="${datosPersonales}">
 
     <fieldset>
         <legend th:text="#{datosPersonales}"/>
+
+    <label class="titulo" th:text="#{etiqueta_tratamiento}+':'"/>
+    <select th:field="*{tratamientoSeleccionado}">
+        <option th:each="tratamiento : ${tratamientos}" th:value="${tratamiento.value}" th:selected="${tratamiento.value==tratamientoSeleccionado}">
+            <th:block th:text="${tratamiento.value}"/>
+        </option>
+    </select>
+        <br />
+
     <label class="titulo" th:text="#{etiqueta_nombre}+':'"/>
     <input type="text" th:field="*{nombre}"/>
 
@@ -35,7 +44,7 @@
             <div th:text="${error}" class="error"/>
         </th:block>
 
-    <label class="titulo" th:text="#{etiqueta_genero}+':'"/>
+    <label class="titulo" th:text="#{etiqueta_genero}"/>
     <th:block th:each="genero : ${generos}">
         <input type="radio" th:field="*{generoSeleccionado}" th:value="${genero.key}" th:checked="${genero.key==generos}">
         <label th:text="${genero.value}"></label>
@@ -51,7 +60,7 @@
         <input type="checkbox" th:field="*{extrasSeleccionados}" th:value="${extra.key}" th:checked="${#lists.contains(extras, extra.key)}">
     </th:block>
     <br />
-    <label class="titulo" th:text="#{etiqueta_nacionalidades} "/>
+    <label class="titulo" th:text="#{etiqueta_nacionalidades}+':' "/>
     <select th:field="*{nacionalidadesSeleccionadas}" multiple="multiple">
         <option name="nacionalidad" th:each="nacionalidad : ${nacionalidades}" th:value="${nacionalidad.value}" >
             <th:block th:text="${nacionalidad.value}" />
@@ -63,7 +72,7 @@
     <th:block th:each="error : ${#fields.errors('nacionalidadesSeleccionadas')}">
         <div th:text="${error}" class="error"/>
     </th:block>
-    <input type="submit" th:value="#{etiqueta_botonEnviar1}">
+    <input type="submit" th:value="#{etiqueta_botonEnviar2}">
     </fieldset>
  </form>
  </body>
