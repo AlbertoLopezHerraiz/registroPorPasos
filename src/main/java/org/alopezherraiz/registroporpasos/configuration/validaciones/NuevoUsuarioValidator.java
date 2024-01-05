@@ -15,6 +15,6 @@ public class NuevoUsuarioValidator implements ConstraintValidator<NuevoUsuarioVa
     @Override
     public boolean isValid(final DatosUsuario usuario, final ConstraintValidatorContext context) {
         // Verificar que el usuario no esté en la colección de usuarios
-        return !Colecciones.usuarioExiste(usuario);
+        return !Colecciones.usuarioExiste(usuario.getUsuario());
     }
 }

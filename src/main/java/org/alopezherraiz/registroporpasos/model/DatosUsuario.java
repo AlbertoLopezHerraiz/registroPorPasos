@@ -19,7 +19,6 @@ public class DatosUsuario {
     private String usuario;
     @NotEmpty
     private String clave;
-    @NotEmpty
     private String validarClave;
 
     DatosPersonales datosPersonales;

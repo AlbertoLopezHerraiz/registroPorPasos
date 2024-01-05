@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = NuevoUsuarioValidator.class)
 public @interface NuevoUsuarioValido {
-    String message() default "El usuario ya está registrado";
+    String message() default "* El usuario ya está registrado";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

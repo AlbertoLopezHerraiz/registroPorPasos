@@ -2,6 +2,7 @@ package org.alopezherraiz.registroporpasos.controller;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.alopezherraiz.registroporpasos.model.Colecciones;
 import org.alopezherraiz.registroporpasos.model.DatosUsuario;
 import org.alopezherraiz.registroporpasos.model.DatosPersonales;
 import org.alopezherraiz.registroporpasos.model.DatosProfesionales;
@@ -11,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
@@ -41,7 +41,10 @@ public class Controlador {
 private Map<String, String>devuelveTratamiento(){
         return getTratamiento();
     }
-    ArrayList<Usuario> usuarios= getUsuarios();
+private Map<String, DatosUsuario>devuelveUsuarios(){
+        return getUsuarios();
+    }
+
     @GetMapping("datos1")
     public String datosBancarios(Model modelo, @ModelAttribute("datosUsuario") DatosUsuario datosUsuario, HttpSession sesion) {
         if(sesion.getAttribute("datosUsuario")!=null){
@@ -100,7 +103,7 @@ private Map<String, String>devuelveTratamiento(){
     }
 
     @GetMapping("resumen")
-    public String resumen(Model modelo, HttpSession sesion, @Valid Usuario usuario) {
+    public String resumen(Model modelo, HttpSession sesion, DatosUsuario usuario) {
         if(sesion.getAttribute("datosPersonales")!=null){
             modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));}
         if(sesion.getAttribute("datosProfesionales")!=null){
@@ -108,12 +111,15 @@ private Map<String, String>devuelveTratamiento(){
         if(sesion.getAttribute("datosUsuario")!=null){
             modelo.addAttribute("datosUsuario", sesion.getAttribute("datosUsuario"));}
         if(sesion.getAttribute("datosUsuario")!=null && sesion.getAttribute("datosProfesionales")!=null && sesion.getAttribute("datosPersonales")!=null){
-            usuario = new Usuario((DatosUsuario) sesion.getAttribute("datosUsuario"),
-                    (DatosPersonales) sesion.getAttribute("datosPersonales"),
-                    (DatosProfesionales) sesion.getAttribute("datosProfesionales"));
-            usuarios.add(usuario);
+           DatosUsuario usuario1= (DatosUsuario) sesion.getAttribute("datosUsuario");
+            usuario.setUsuario(usuario1.getUsuario());
+            usuario.setClave(usuario1.getClave());
+            usuario.setDatosPersonales((DatosPersonales) sesion.getAttribute("datosPersonales"));
+            usuario.setDatosProfesionales((DatosProfesionales) sesion.getAttribute("datosProfesionales"));
+            Colecciones.agregarUsuario(usuario);
+            System.out.println(usuario);
         }
-        System.out.println(usuarios);
+
         return "resumen";
     }
 }

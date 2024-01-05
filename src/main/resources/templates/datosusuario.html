@@ -23,17 +23,15 @@
         <input type="password" th:field="*{clave}" />
         <br />
         <label class="titulo" th:text="#{etiqueta_claveConfirmar}+':'"/>
-        <input type="password" th:field="*{validarClave}" />
+        <input type="password" th:field="*{validarClave}" /> <br/>
 
-        <div th:if="${#fields.hasErrors('global')}">
-        <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error"/>
-        </div>
+        <th:block th:if="${#fields.hasErrors('global')}">
+            <div th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error"/>
+        </th:block>
         <th:block th:each="error : ${#fields.errors('clave')}">
             <div th:text="${error}" class="error"/>
         </th:block>
-        <th:block th:each="error : ${#fields.errors('validarClave')}">
-            <div th:text="${error}" class="error"/>
-        </th:block><br/>
+
         <input type="submit" th:value="#{etiqueta_botonEnviar1}">
 
     </fieldset>
