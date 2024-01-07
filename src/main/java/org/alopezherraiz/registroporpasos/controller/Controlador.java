@@ -18,6 +18,9 @@ import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
 
 @Controller
 public class Controlador {
+    private static final int MAX_INTENTOS =3;
+    private int contador = MAX_INTENTOS;
+
     @ModelAttribute("generos")
     private Map<String, String> devuelveListaGeneros() {
         return getGeneros();
@@ -117,9 +120,63 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
             usuario.setDatosPersonales((DatosPersonales) sesion.getAttribute("datosPersonales"));
             usuario.setDatosProfesionales((DatosProfesionales) sesion.getAttribute("datosProfesionales"));
             Colecciones.agregarUsuario(usuario);
-            System.out.println(usuario);
+            String mensaje= "Usuario introducido satisfactoriamente.";
+            sesion.removeAttribute("datosUsuario");
+            sesion.removeAttribute("datosPersonales");
+            sesion.removeAttribute("datosProfesionales");
+            modelo.addAttribute("mensaje", mensaje);
         }
-
         return "resumen";
+    }
+    @GetMapping("paso1")
+    public String paso1Get(HttpSession sesion){
+        sesion.setAttribute("paso", 1);
+        return "inicio-usuario";
+    }
+    @PostMapping("paso1")
+    public String paso1Post(Model modelo,
+                            @RequestParam String usuario,
+                            HttpSession sesion){
+
+        for(int i=1;i<=devuelveUsuarios().size();i++){
+
+            if(usuario.equals(devuelveUsuarios().get(usuario).getUsuario() )){
+                sesion.setAttribute("usuario", usuario);
+                contador=MAX_INTENTOS;
+                return "redirect:/paso2";
+            }
+        }
+        modelo.addAttribute("mensaje", "ERROR: Usuario incorrecto");
+        return "inicio-usuario";
+    }
+    @GetMapping("paso2")
+    public String paso2Get(HttpSession sesion){
+        int paso= (int) sesion.getAttribute("paso")+1;
+        sesion.setAttribute("paso", paso);
+        return "inicio-clave";
+    }
+    @PostMapping("paso2")
+    public String paso2Post(Model modelo,
+                            @RequestParam String clave,
+                            HttpSession sesion) {
+
+        for (int i = 1; i <= devuelveUsuarios().size(); i++) {
+            String usuario = (String) sesion.getAttribute("usuario");
+
+            if (clave.equals(devuelveUsuarios().get(usuario).getClave())) {
+                sesion.setAttribute("clave", clave);
+
+                return "redirect:/formulario/paso3";
+            }
+            contador--;
+            modelo.addAttribute("mensaje",  "ERROR: Usuario desconocido");
+
+            if(contador==0){
+                return "cuenta";
+            }
+            modelo.addAttribute("mensaje",  "ERROR: Contaseña incorrecta, te quedan "
+                    + contador + " intentos");
+        }
+        return "inicio-clave";
     }
 }

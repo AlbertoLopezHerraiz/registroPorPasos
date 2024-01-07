@@ -6,4 +6,6 @@ form{
         color: red;
         font-weight: bold;
     }
-
+.inicioSesion{
+   float: right;
+}

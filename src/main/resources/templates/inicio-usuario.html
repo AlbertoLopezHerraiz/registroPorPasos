@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuario</title>
+</head>
+<body>
+<form id="inicio-usuario" action="paso1" method="post" th:object="${datosUsuario}">
+    <label class="titulo" th:text="#{etiqueta_usuario}+':'"/>
+    <input type="text" th:field="*{usuario}" />
+    <input type="submit" value="Enviar">
+    </br>
+    <div style="color:darkred"><th:block th:text="${mensaje}" /></div>
+</form>
+</body>
+</html>

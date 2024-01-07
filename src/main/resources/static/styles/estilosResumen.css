@@ -7,3 +7,6 @@ form{
 legend{
     font-weight: bold;
 }
+.inicioSesion{
+    float: right;
+}
