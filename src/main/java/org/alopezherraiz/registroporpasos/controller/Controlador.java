@@ -1,5 +1,7 @@
 package org.alopezherraiz.registroporpasos.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.alopezherraiz.registroporpasos.model.Colecciones;
@@ -106,26 +108,32 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     }
 
     @GetMapping("resumen")
-    public String resumen(Model modelo, HttpSession sesion, DatosUsuario usuario) {
+    public String resumen(Model modelo, HttpSession sesion) {
         if(sesion.getAttribute("datosPersonales")!=null){
             modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));}
         if(sesion.getAttribute("datosProfesionales")!=null){
             modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));}
         if(sesion.getAttribute("datosUsuario")!=null){
             modelo.addAttribute("datosUsuario", sesion.getAttribute("datosUsuario"));}
-        if(sesion.getAttribute("datosUsuario")!=null && sesion.getAttribute("datosProfesionales")!=null && sesion.getAttribute("datosPersonales")!=null){
-           DatosUsuario usuario1= (DatosUsuario) sesion.getAttribute("datosUsuario");
-            usuario.setUsuario(usuario1.getUsuario());
-            usuario.setClave(usuario1.getClave());
-            usuario.setDatosPersonales((DatosPersonales) sesion.getAttribute("datosPersonales"));
-            usuario.setDatosProfesionales((DatosProfesionales) sesion.getAttribute("datosProfesionales"));
-            Colecciones.agregarUsuario(usuario);
-            String mensaje= "Usuario introducido satisfactoriamente.";
-            sesion.removeAttribute("datosUsuario");
-            sesion.removeAttribute("datosPersonales");
-            sesion.removeAttribute("datosProfesionales");
-            modelo.addAttribute("mensaje", mensaje);
-        }
+
+        return "resumen";
+    }
+    @PostMapping("resumen")
+    public String resumenPost(Model modelo, HttpSession sesion, DatosUsuario usuario){
+        DatosUsuario usuario1= (DatosUsuario) sesion.getAttribute("datosUsuario");
+        modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));
+        modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));
+        usuario.setUsuario(usuario1.getUsuario());
+        usuario.setClave(usuario1.getClave());
+        usuario.setDatosPersonales((DatosPersonales) sesion.getAttribute("datosPersonales"));
+        usuario.setDatosProfesionales((DatosProfesionales) sesion.getAttribute("datosProfesionales"));
+        Colecciones.agregarUsuario(usuario);
+        String mensaje= "Usuario introducido satisfactoriamente.";
+        modelo.addAttribute("mensaje", mensaje);
+
+        sesion.removeAttribute("datosUsuario");
+        sesion.removeAttribute("datosPersonales");
+        sesion.removeAttribute("datosProfesionales");
         return "resumen";
     }
     @GetMapping("paso1")
@@ -137,16 +145,16 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     public String paso1Post(Model modelo,
                             @RequestParam String usuario,
                             HttpSession sesion){
-
+        contador=MAX_INTENTOS;
         for(int i=1;i<=devuelveUsuarios().size();i++){
 
             if(usuario.equals(devuelveUsuarios().get(usuario).getUsuario() )){
                 sesion.setAttribute("usuario", usuario);
-                contador=MAX_INTENTOS;
+
                 return "redirect:/paso2";
             }
         }
-        modelo.addAttribute("mensaje", "ERROR: Usuario incorrecto");
+        modelo.addAttribute("mensaje", "* ERROR: Usuario incorrecto");
         return "inicio-usuario";
     }
     @GetMapping("paso2")
@@ -166,17 +174,42 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
             if (clave.equals(devuelveUsuarios().get(usuario).getClave())) {
                 sesion.setAttribute("clave", clave);
 
-                return "redirect:/formulario/paso3";
+                return "redirect:/devolver";
             }
             contador--;
-            modelo.addAttribute("mensaje",  "ERROR: Usuario desconocido");
+            modelo.addAttribute("mensaje",  "* ERROR: Usuario desconocido");
 
             if(contador==0){
-                return "cuenta";
+                return "inicio-usuario";
             }
-            modelo.addAttribute("mensaje",  "ERROR: Contaseña incorrecta, te quedan "
+            modelo.addAttribute("mensaje",  "* ERROR: Contaseña incorrecta, te quedan "
                     + contador + " intentos");
         }
         return "inicio-clave";
+    }
+    @GetMapping("devolver")
+    public String devolver(Model modelo , HttpSession sesion, HttpServletResponse respuestaHttp,
+                           @CookieValue(name = "credenciales", defaultValue = "0") String credenciales){
+
+        int num =1;
+        if(!credenciales.equals("0")){
+            try {
+                num = Integer.parseInt(credenciales);
+                if(num<0){
+                    return "<p style='color:red'>Has modificado el valor de la cookie  &quot;contador&quot;</p>";
+                }else{
+                    num++;
+                }
+            }catch(NumberFormatException e){
+                return "<p style='color:red'>Has modificado el valor de la cookie &quot;contador&quot;</p>";
+            }
+        }
+        Cookie miCookie= new Cookie("credenciales", ""+num);
+        respuestaHttp.addCookie(miCookie);
+        modelo.addAttribute("usuario", sesion.getAttribute("usuario"));
+        modelo.addAttribute("clave", sesion.getAttribute("clave"));
+        modelo.addAttribute("iteracion", miCookie.getValue());
+
+        return "inicio-completado";
     }
 }

@@ -58,7 +58,7 @@
         </div>
     </fieldset>
 </form>
-<form method="post" th:object="${datosProfesionales}">
+<form method="post" action="resumen" th:object="${datosProfesionales}">
     <fieldset>
         <legend th:text="#{datosProfesionales}"/>
         <div th:if="${datosProfesionales!=null}">
@@ -79,6 +79,7 @@
         <br />
         </div>
     </fieldset>
+    <input type="submit" th:value="#{etiqueta_botonEnviar3}">
 </form>
 
 </body>

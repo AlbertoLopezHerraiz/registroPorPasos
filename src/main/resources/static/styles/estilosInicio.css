@@ -1,0 +1,11 @@
+form{
+    line-height: 1.6;
+    border: solid 1px black;
+}
+.bardatos{
+    float: right;
+}
+.error{
+    color: red;
+    font-weight: bold;
+}

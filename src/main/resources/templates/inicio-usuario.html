@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Usuario</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/estilosInicio.css}" />
 </head>
 <body>
-<form id="inicio-usuario" action="paso1" method="post" th:object="${datosUsuario}">
+<div th:insert="~{fragmentos/navbar}"></div>
+<form id="inicio-usuario" action="paso1" method="post" >
+    <h1 th:text="#{etiqueta_Autenticacion}"></h1>
     <label class="titulo" th:text="#{etiqueta_usuario}+':'"/>
-    <input type="text" th:field="*{usuario}" />
-    <input type="submit" value="Enviar">
+    <input type="text" id="usuario" name="usuario"/>
+    <input type="submit" th:value="#{etiqueta_inicioSesion}">
     </br>
-    <div style="color:darkred"><th:block th:text="${mensaje}" /></div>
+    <div class="error"><th:block th:text="${mensaje}" /></div>
 </form>
 </body>
 </html>
