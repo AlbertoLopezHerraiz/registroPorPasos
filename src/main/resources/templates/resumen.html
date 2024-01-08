@@ -7,7 +7,8 @@
 </head>
 <body>
 <div th:insert="~{fragmentos/navbar}"></div>
-<p th:text="*{mensaje}"></p>
+<p th:text="*{mensaje}" style="color: green"></p>
+<p th:text="*{mensaje2}" style="color: red"></p>
 <form method="post" th:object="${datosUsuario}">
     <fieldset>
         <legend th:text="#{datosUsuario}"/>
@@ -79,7 +80,8 @@
         <br />
         </div>
     </fieldset>
-    <input type="submit" th:value="#{etiqueta_botonEnviar3}">
+    <input type="submit" th:value="#{etiqueta_botonEnviar4}">
+    <a href="/masacre" th:text="#{etiqueta_botonVolver}"></a>
 </form>
 
 </body>

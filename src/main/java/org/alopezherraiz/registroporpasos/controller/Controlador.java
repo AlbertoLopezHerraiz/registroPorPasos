@@ -58,8 +58,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     }
 
     @PostMapping("datos1")
-    public String datosBancariosPost(Model modelo,
-                                     @Valid @ModelAttribute("datosUsuario") DatosUsuario datosUsuario,
+    public String datosBancariosPost(@Valid @ModelAttribute("datosUsuario") DatosUsuario datosUsuario,
                                      BindingResult resultadoVinculacion, HttpSession sesion) {
 
         if (resultadoVinculacion.hasErrors()) {
@@ -76,8 +75,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     }
 
     @PostMapping("datos2")
-    public String datosPersonalesPost(Model modelo,
-                                      @Valid @ModelAttribute("datosPersonales") DatosPersonales datosPersonales,
+    public String datosPersonalesPost(@Valid @ModelAttribute("datosPersonales") DatosPersonales datosPersonales,
                                       BindingResult resultadoVinculacion, HttpSession sesion) {
 
         if (resultadoVinculacion.hasErrors()) {
@@ -97,8 +95,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     }
 
     @PostMapping("datos3")
-    public String datosProfesionalesPost(Model modelo,
-                                         @Valid @ModelAttribute("datosProfesionales")DatosProfesionales datosProfesionales,
+    public String datosProfesionalesPost(@Valid @ModelAttribute("datosProfesionales")DatosProfesionales datosProfesionales,
                                          BindingResult resultadoVinculacion, HttpSession sesion) {
         if (resultadoVinculacion.hasErrors()) {
             return "datosprofesionales";
@@ -120,6 +117,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     }
     @PostMapping("resumen")
     public String resumenPost(Model modelo, HttpSession sesion, DatosUsuario usuario){
+        try{
         DatosUsuario usuario1= (DatosUsuario) sesion.getAttribute("datosUsuario");
         modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));
         modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));
@@ -134,11 +132,20 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         sesion.removeAttribute("datosUsuario");
         sesion.removeAttribute("datosPersonales");
         sesion.removeAttribute("datosProfesionales");
+        } catch (Exception e){
+            String mensaje= "* El usuario no está completo";
+            modelo.addAttribute("mensaje2", mensaje);
+        }
         return "resumen";
     }
+    @GetMapping("masacre")
+    public String masacre(HttpSession session){
+        session.invalidate();
+        return "redirect:/datos1";
+    }
     @GetMapping("paso1")
-    public String paso1Get(HttpSession sesion){
-        sesion.setAttribute("paso", 1);
+    public String paso1Get(){
+
         return "inicio-usuario";
     }
     @PostMapping("paso1")
@@ -158,9 +165,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "inicio-usuario";
     }
     @GetMapping("paso2")
-    public String paso2Get(HttpSession sesion){
-        int paso= (int) sesion.getAttribute("paso")+1;
-        sesion.setAttribute("paso", paso);
+    public String paso2Get(){
         return "inicio-clave";
     }
     @PostMapping("paso2")

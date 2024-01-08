@@ -2,7 +2,6 @@ package org.alopezherraiz.registroporpasos.model;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.springframework.format.annotation.NumberFormat;
 
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor
