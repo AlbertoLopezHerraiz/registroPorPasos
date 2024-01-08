@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor @AllArgsConstructor
 public class DatosProfesionales {
     private String departamentoSeleccionado;
-    @DecimalMin(value= "0.00")
+    @DecimalMin(value= "1080.00")
     @Digits(integer = 10,fraction = 2) @NotNull
     private double salario;
     private String comentarios;

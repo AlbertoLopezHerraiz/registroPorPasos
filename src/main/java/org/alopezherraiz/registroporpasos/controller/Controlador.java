@@ -107,11 +107,15 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     @GetMapping("resumen")
     public String resumen(Model modelo, HttpSession sesion) {
         if(sesion.getAttribute("datosPersonales")!=null){
-            modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));}
+            modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));
+        }
+
         if(sesion.getAttribute("datosProfesionales")!=null){
-            modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));}
+            modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));
+        }
         if(sesion.getAttribute("datosUsuario")!=null){
-            modelo.addAttribute("datosUsuario", sesion.getAttribute("datosUsuario"));}
+            modelo.addAttribute("datosUsuario", sesion.getAttribute("datosUsuario"));
+        }else return "resumen";
 
         return "resumen";
     }
@@ -136,7 +140,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
             String mensaje= "* El usuario no está completo";
             modelo.addAttribute("mensaje2", mensaje);
         }
-        return "resumen";
+        return "resumen2";
     }
     @GetMapping("masacre")
     public String masacre(HttpSession session){
