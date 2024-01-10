@@ -86,9 +86,9 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     }
 
     @GetMapping("datos3")
-    public String datosProfesionales(Model modelo, @ModelAttribute("datosProfesionales") DatosProfesionales datosProfesionales, HttpSession sesion) {
-       datosProfesionales.setDepartamentoSeleccionado("M");
-       datosProfesionales.setSalario(2750.00);
+    public String datosProfesionales(Model modelo,
+                                     @ModelAttribute("datosProfesionales") DatosProfesionales datosProfesionales, HttpSession sesion) {
+
         if(sesion.getAttribute("datosProfesionales")!=null){
             modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));}
         return "datosprofesionales";
