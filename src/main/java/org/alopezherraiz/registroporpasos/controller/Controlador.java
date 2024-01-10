@@ -21,7 +21,6 @@ import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
 @Controller
 public class Controlador {
     private static final int MAX_INTENTOS =3;
-    private int contador = MAX_INTENTOS;
 
     @ModelAttribute("generos")
     private Map<String, String> devuelveListaGeneros() {
@@ -123,12 +122,14 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     public String resumenPost(Model modelo, HttpSession sesion, DatosUsuario usuario){
         try{
         DatosUsuario usuario1= (DatosUsuario) sesion.getAttribute("datosUsuario");
+        modelo.addAttribute("datosUsuario", sesion.getAttribute("datosUsuario"));
         modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));
         modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));
         usuario.setUsuario(usuario1.getUsuario());
         usuario.setClave(usuario1.getClave());
         usuario.setDatosPersonales((DatosPersonales) sesion.getAttribute("datosPersonales"));
         usuario.setDatosProfesionales((DatosProfesionales) sesion.getAttribute("datosProfesionales"));
+
         Colecciones.agregarUsuario(usuario);
         String mensaje= "Usuario introducido satisfactoriamente.";
         modelo.addAttribute("mensaje", mensaje);
@@ -140,7 +141,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
             String mensaje= "* El usuario no está completo";
             modelo.addAttribute("mensaje2", mensaje);
         }
-        return "resumen2";
+        return "resumen";
     }
     @GetMapping("masacre")
     public String masacre(HttpSession session){
@@ -156,13 +157,16 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     public String paso1Post(Model modelo,
                             @RequestParam String usuario,
                             HttpSession sesion){
-        contador=MAX_INTENTOS;
         for(int i=1;i<=devuelveUsuarios().size();i++){
+            try {
+                if (usuario.equals(devuelveUsuarios().get(usuario).getUsuario())) {
+                    sesion.setAttribute("usuario", usuario);
 
-            if(usuario.equals(devuelveUsuarios().get(usuario).getUsuario() )){
-                sesion.setAttribute("usuario", usuario);
-
-                return "redirect:/paso2";
+                    return "redirect:/paso2";
+                }
+            }   catch (Exception e){
+                modelo.addAttribute("mensaje", "* ERROR: Usuario desconocido");
+                return "inicio-usuario";
             }
         }
         modelo.addAttribute("mensaje", "* ERROR: Usuario incorrecto");
@@ -176,7 +180,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     public String paso2Post(Model modelo,
                             @RequestParam String clave,
                             HttpSession sesion) {
-
+        int contador = MAX_INTENTOS;
         for (int i = 1; i <= devuelveUsuarios().size(); i++) {
             String usuario = (String) sesion.getAttribute("usuario");
 
@@ -188,7 +192,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
             contador--;
             modelo.addAttribute("mensaje",  "* ERROR: Usuario desconocido");
 
-            if(contador==0){
+            if(contador ==0){
                 return "inicio-usuario";
             }
             modelo.addAttribute("mensaje",  "* ERROR: Contaseña incorrecta, te quedan "
