@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
@@ -22,6 +23,7 @@ import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
 public class Controlador {
     private static final int MAX_INTENTOS =3;
     private int contador = MAX_INTENTOS;
+    private static final String COOKIE_NAME = "sesionesUsuarios";
 
     @ModelAttribute("generos")
     private Map<String, String> devuelveListaGeneros() {
@@ -140,7 +142,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
             String mensaje= "* El usuario no está completo";
             modelo.addAttribute("mensaje2", mensaje);
         }
-        return "resumen2";
+        return "resumen";
     }
     @GetMapping("masacre")
     public String masacre(HttpSession session){
@@ -148,8 +150,16 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "redirect:/datos1";
     }
     @GetMapping("paso1")
-    public String paso1Get(){
+    public String paso1Get(@CookieValue(value = COOKIE_NAME, defaultValue = "{}") String sesionesUsuarios,
+                           HttpServletResponse response){
+        Map<String, Integer> sesionesMap = convertirCadenaAMapa(sesionesUsuarios);
 
+        String nombreUsuario = "usuarioEjemplo";
+
+        sesionesMap.put(nombreUsuario, sesionesMap.getOrDefault(nombreUsuario, 0) + 1);
+
+        Cookie cookie = new Cookie(COOKIE_NAME, convertirMapACadena(sesionesMap));
+        response.addCookie(cookie);
         return "inicio-usuario";
     }
     @PostMapping("paso1")
@@ -220,5 +230,18 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         modelo.addAttribute("iteracion", miCookie.getValue());
 
         return "inicio-completado";
+    }
+
+    private Map<String, Integer> convertirCadenaAMapa(String sesionesUsuarios) {
+        // Convertir la cadena JSON a un Map utilizando una biblioteca como Jackson
+        // Devuelve el Map resultante
+        // Ejemplo: {"usuario1": 2, "usuario2": 1}
+        return new HashMap<>(); // Implementa según tus necesidades
+    }
+    private String convertirMapACadena(Map<String, Integer> sesionesMap) {
+        // Convertir el Map a una cadena JSON utilizando una biblioteca como Jackson
+        // Devuelve la cadena resultante
+        // Ejemplo: {"usuario1": 2, "usuario2": 1}
+        return "{}"; // Implementa según tus necesidades
     }
 }
