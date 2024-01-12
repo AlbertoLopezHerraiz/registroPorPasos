@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
@@ -149,7 +150,9 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "redirect:/datos1";
     }
     @GetMapping("paso1")
-    public String paso1Get(){
+    public String paso1Get(HttpServletResponse respuestaHttp,
+                           @CookieValue(name = "credenciales", defaultValue = "0") String credenciales,
+                           Model modelo){
 
         return "inicio-usuario";
     }
@@ -186,7 +189,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
 
             if (clave.equals(devuelveUsuarios().get(usuario).getClave())) {
                 sesion.setAttribute("clave", clave);
-
+                sesion.setAttribute("datosUsuario", devuelveUsuarios().get(usuario));
                 return "redirect:/devolver";
             }
             contador--;
@@ -219,6 +222,10 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         }
         Cookie miCookie= new Cookie("credenciales", ""+num);
         respuestaHttp.addCookie(miCookie);
+        DatosUsuario datosUsuario = (DatosUsuario) sesion.getAttribute("datosUsuario");
+        DatosPersonales datosPersonales = datosUsuario.getDatosPersonales();
+        modelo.addAttribute("tratamientoSeleccionado", datosPersonales.getTratamientoSeleccionado());
+        modelo.addAttribute("apellidos", datosPersonales.getApellidos());
         modelo.addAttribute("usuario", sesion.getAttribute("usuario"));
         modelo.addAttribute("clave", sesion.getAttribute("clave"));
         modelo.addAttribute("iteracion", miCookie.getValue());
