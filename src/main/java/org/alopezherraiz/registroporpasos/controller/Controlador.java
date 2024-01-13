@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
@@ -22,8 +23,7 @@ import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
 @Controller
 public class Controlador {
     private static final int MAX_INTENTOS =3;
-    private int contador = MAX_INTENTOS;
-    private static final String COOKIE_NAME = "sesionesUsuarios";
+    int contador = MAX_INTENTOS;
 
     @ModelAttribute("generos")
     private Map<String, String> devuelveListaGeneros() {
@@ -51,7 +51,6 @@ private Map<String, String>devuelveTratamiento(){
 private Map<String, DatosUsuario>devuelveUsuarios(){
         return getUsuarios();
     }
-
     @GetMapping("datos1")
     public String datosBancarios(Model modelo, @ModelAttribute("datosUsuario") DatosUsuario datosUsuario, HttpSession sesion) {
         if(sesion.getAttribute("datosUsuario")!=null){
@@ -88,9 +87,9 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     }
 
     @GetMapping("datos3")
-    public String datosProfesionales(Model modelo, @ModelAttribute("datosProfesionales") DatosProfesionales datosProfesionales, HttpSession sesion) {
-       datosProfesionales.setDepartamentoSeleccionado("M");
-       datosProfesionales.setSalario(2750.00);
+    public String datosProfesionales(Model modelo,
+                                     @ModelAttribute("datosProfesionales") DatosProfesionales datosProfesionales, HttpSession sesion) {
+
         if(sesion.getAttribute("datosProfesionales")!=null){
             modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));}
         return "datosprofesionales";
@@ -125,12 +124,14 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
     public String resumenPost(Model modelo, HttpSession sesion, DatosUsuario usuario){
         try{
         DatosUsuario usuario1= (DatosUsuario) sesion.getAttribute("datosUsuario");
+        modelo.addAttribute("datosUsuario", sesion.getAttribute("datosUsuario"));
         modelo.addAttribute("datosProfesionales", sesion.getAttribute("datosProfesionales"));
         modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));
         usuario.setUsuario(usuario1.getUsuario());
         usuario.setClave(usuario1.getClave());
         usuario.setDatosPersonales((DatosPersonales) sesion.getAttribute("datosPersonales"));
         usuario.setDatosProfesionales((DatosProfesionales) sesion.getAttribute("datosProfesionales"));
+
         Colecciones.agregarUsuario(usuario);
         String mensaje= "Usuario introducido satisfactoriamente.";
         modelo.addAttribute("mensaje", mensaje);
@@ -150,36 +151,54 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "redirect:/datos1";
     }
     @GetMapping("paso1")
-    public String paso1Get(@CookieValue(value = COOKIE_NAME, defaultValue = "{}") String sesionesUsuarios,
-                           HttpServletResponse response){
-        Map<String, Integer> sesionesMap = convertirCadenaAMapa(sesionesUsuarios);
+    public String paso1Get(Model modelo, ArrayList<String> usuariosIniciados,
+                           @CookieValue(name = "credenciales", defaultValue = "") String credenciales, HttpSession sesion){
+        try{
+            String mensaje= (String) sesion.getAttribute("mensaje");
+            modelo.addAttribute("mensaje",mensaje);
+            sesion.removeAttribute("mensaje");}
+        catch (Exception ignored){
 
-        String nombreUsuario = "usuarioEjemplo";
+        }
+        if(!credenciales.isEmpty()) {
+            String[] partesCredenciales = credenciales.split("#");
 
-        sesionesMap.put(nombreUsuario, sesionesMap.getOrDefault(nombreUsuario, 0) + 1);
-
-        Cookie cookie = new Cookie(COOKIE_NAME, convertirMapACadena(sesionesMap));
-        response.addCookie(cookie);
+           for(String usuario : partesCredenciales){
+               String[] datosUsuario = usuario.split(":");
+               usuariosIniciados.add(datosUsuario[0]);
+           }
+            System.out.println(usuariosIniciados + " ey" );
+           modelo.addAttribute("usuariosIniciados", usuariosIniciados);
+        }
         return "inicio-usuario";
     }
     @PostMapping("paso1")
     public String paso1Post(Model modelo,
                             @RequestParam String usuario,
+                            @RequestParam(value = "usuario2", required = false) String usuario2,
                             HttpSession sesion){
-        contador=MAX_INTENTOS;
         for(int i=1;i<=devuelveUsuarios().size();i++){
+            try {
+                if (usuario.equals(devuelveUsuarios().get(usuario).getUsuario())) {
+                    sesion.setAttribute("usuario", usuario);
+                    return "redirect:/paso2";
+                }else if(usuario2.equals(devuelveUsuarios().get(usuario2).getUsuario())){
+                    sesion.setAttribute("usuario", usuario2);
+                    return "redirect:/paso2";
+                }
+            }   catch (Exception ignored){
 
-            if(usuario.equals(devuelveUsuarios().get(usuario).getUsuario() )){
-                sesion.setAttribute("usuario", usuario);
-
-                return "redirect:/paso2";
             }
         }
+        sesion.setAttribute("mensaje", modelo.getAttribute("mensaje"));
         modelo.addAttribute("mensaje", "* ERROR: Usuario incorrecto");
-        return "inicio-usuario";
+        sesion.setAttribute("mensaje", modelo.getAttribute("mensaje"));
+        return "redirect:/paso1";
     }
+
     @GetMapping("paso2")
     public String paso2Get(){
+
         return "inicio-clave";
     }
     @PostMapping("paso2")
@@ -192,56 +211,66 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
 
             if (clave.equals(devuelveUsuarios().get(usuario).getClave())) {
                 sesion.setAttribute("clave", clave);
-
+                sesion.setAttribute("datosUsuario", devuelveUsuarios().get(usuario));
                 return "redirect:/devolver";
             }
             contador--;
             modelo.addAttribute("mensaje",  "* ERROR: Usuario desconocido");
 
-            if(contador==0){
+            if(contador ==0){
                 return "inicio-usuario";
             }
             modelo.addAttribute("mensaje",  "* ERROR: Contaseña incorrecta, te quedan "
                     + contador + " intentos");
         }
+
         return "inicio-clave";
     }
     @GetMapping("devolver")
     public String devolver(Model modelo , HttpSession sesion, HttpServletResponse respuestaHttp,
-                           @CookieValue(name = "credenciales", defaultValue = "0") String credenciales){
+                           @CookieValue(name = "credenciales", defaultValue = "") String credenciales){
+        DatosUsuario usuario = getUsuarios().get((String) sesion.getAttribute("usuario"));
+        modelo.addAttribute("usuario", usuario);
 
-        int num =1;
-        if(!credenciales.equals("0")){
-            try {
-                num = Integer.parseInt(credenciales);
-                if(num<0){
-                    return "<p style='color:red'>Has modificado el valor de la cookie  &quot;contador&quot;</p>";
-                }else{
-                    num++;
-                }
-            }catch(NumberFormatException e){
-                return "<p style='color:red'>Has modificado el valor de la cookie &quot;contador&quot;</p>";
-            }
+        if(credenciales.isEmpty()){
+            credenciales = sesion.getAttribute("usuario")+":0#";
+            sesion.setAttribute((String)sesion.getAttribute("usuario"), 0);
         }
-        Cookie miCookie= new Cookie("credenciales", ""+num);
-        respuestaHttp.addCookie(miCookie);
+        credenciales = contenidoCookie(credenciales, sesion);
+        respuestaHttp.addCookie(new Cookie("credenciales", credenciales));
+        DatosUsuario datosUsuario = (DatosUsuario) sesion.getAttribute("datosUsuario");
+        DatosPersonales datosPersonales = datosUsuario.getDatosPersonales();
+        modelo.addAttribute("tratamientoSeleccionado", datosPersonales.getTratamientoSeleccionado());
+        modelo.addAttribute("apellidos", datosPersonales.getApellidos());
         modelo.addAttribute("usuario", sesion.getAttribute("usuario"));
         modelo.addAttribute("clave", sesion.getAttribute("clave"));
-        modelo.addAttribute("iteracion", miCookie.getValue());
+        modelo.addAttribute("contador", sesion.getAttribute((String) sesion.getAttribute("usuario")));
 
         return "inicio-completado";
     }
-
-    private Map<String, Integer> convertirCadenaAMapa(String sesionesUsuarios) {
-        // Convertir la cadena JSON a un Map utilizando una biblioteca como Jackson
-        // Devuelve el Map resultante
-        // Ejemplo: {"usuario1": 2, "usuario2": 1}
-        return new HashMap<>(); // Implementa según tus necesidades
+    @PostMapping("devolver")
+    public String devolverPost(){
+        return"redirect:/paso1";
     }
-    private String convertirMapACadena(Map<String, Integer> sesionesMap) {
-        // Convertir el Map a una cadena JSON utilizando una biblioteca como Jackson
-        // Devuelve la cadena resultante
-        // Ejemplo: {"usuario1": 2, "usuario2": 1}
-        return "{}"; // Implementa según tus necesidades
+    public static String contenidoCookie(String credenciales, HttpSession sesion){
+        String texto="";
+        HashMap<String, Integer> usuarios= new HashMap<>();
+        String[] partesCredenciales = credenciales.split("#");
+
+        for(String usuario1 : partesCredenciales){
+            String[] datosUsuario = usuario1.split(":");
+            usuarios.put(datosUsuario[0], Integer.parseInt(datosUsuario[1]));
+        }
+        if(!usuarios.containsKey((String) sesion.getAttribute("usuario"))){
+            usuarios.put((String)sesion.getAttribute("usuario"), 1);
+        }else{
+            usuarios.put((String)sesion.getAttribute("usuario"), usuarios.get((String) sesion.getAttribute("usuario"))+1);
+        }
+        for(Map.Entry<String, Integer>usuario1 : usuarios.entrySet()){
+            texto += usuario1.getKey() +":"+usuario1.getValue()+"#";
+            sesion.setAttribute(usuario1.getKey(), usuario1.getValue());
+        }
+        sesion.setAttribute("usuariosIniciados",usuarios);
+        return texto;
     }
 }

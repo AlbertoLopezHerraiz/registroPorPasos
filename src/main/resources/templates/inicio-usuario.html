@@ -11,9 +11,31 @@
     <h1 th:text="#{etiqueta_Autenticacion}"></h1>
     <label class="titulo" th:text="#{etiqueta_usuario}+':'"/>
     <input type="text" id="usuario" name="usuario"/>
+    <div th:if="${usuariosIniciados}!=null">
+        <label class="titulo" th:text="#{etiqueta_usuariosIniciados} + ': '"/>
+        <select th:field="*{usuariosIniciados}" id="usuario2" onchange="mostrarSeleccion()">
+            <option value="-">-</option>
+            <option th:each="usuario : ${usuariosIniciados}" th:value="${usuario}" >
+                <th:block th:text="${usuario}" />
+            </option>
+        </select><br/>
+    </div>
     <input type="submit" th:value="#{etiqueta_inicioSesion}">
     </br>
     <div class="error"><th:block th:text="${mensaje}" /></div>
 </form>
+<script>
+    function mostrarSeleccion() {
+        // Obtener el elemento select
+        var selectElement = document.getElementById("usuario2");
+
+        // Obtener el valor seleccionado
+        var selectedValue = selectElement.options[selectElement.selectedIndex].value;
+
+        // Asignar el valor al elemento input
+        document.getElementById("usuario").value = selectedValue;
+    }
+</script>
 </body>
+
 </html>

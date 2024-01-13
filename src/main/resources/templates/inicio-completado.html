@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Área Personal</title>
+    <title>Área Personal de *{usuario}</title>
 </head>
 <body>
     <h1 th:text="#{etiqueta_areaPersonal}"></h1>
+<p th:text="'Hola ' + *{tratamientoSeleccionado} + ' ' + *{apellidos} "> Hola <strong th:text="*{tratamientoSeleccionado}"></strong> [[*{apellidos}]]</p>
+<p th:text="'Veces que has iniciado: ' + *{contador}"/>
+<form id="devolver" action="devolver" method="post">
+    <input type="submit" th:value="#{etiqueta_volver}">
+</form>
 </body>
 </html>
