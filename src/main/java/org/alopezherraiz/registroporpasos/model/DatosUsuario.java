@@ -24,9 +24,4 @@ public class DatosUsuario {
     DatosPersonales datosPersonales;
     DatosProfesionales datosProfesionales;
 
-    public DatosUsuario(String usuario, String clave, String validarClave) {
-        this.usuario = usuario;
-        this.clave = clave;
-        this.validarClave = validarClave;
-    }
 }

@@ -22,42 +22,54 @@ import static org.alopezherraiz.registroporpasos.model.Colecciones.*;
 
 @Controller
 public class Controlador {
+    //numero maximo de intentos
     private static final int MAX_INTENTOS =3;
+    //contador para que se muestre el mensaje de error de clave si la clave es incorrecta
     int contador = MAX_INTENTOS;
 
+    //mapeo de los generoSeleccionado
     @ModelAttribute("generos")
     private Map<String, String> devuelveListaGeneros() {
         return getGeneros();
     }
 
+    //mapeo de los checkbox de datos personales
     @ModelAttribute("extras")
     private Map<String, String> devuelveListaExtras() {
         return getExtras();
     }
 
+    //mapeo de nacionalidades
     @ModelAttribute("nacionalidades")
     private Map<String, String> devuelveListaNacionalidades() {
         return getNacionalidades();
     }
 
+    //mapeo de departamentos
     @ModelAttribute("departamentos")
     private Map<String, String> devuelveDepartamentoSeleccionado() {
         return getDepartamentos();
     }
+
+    //mapeo de tratamientos
     @ModelAttribute("tratamientos")
 private Map<String, String>devuelveTratamiento(){
         return getTratamiento();
     }
+
+    //mapeo de usuarios existentes
 private Map<String, DatosUsuario>devuelveUsuarios(){
         return getUsuarios();
     }
+
+    //muestra el formulario inicial para creación de usuarios nuevos
     @GetMapping("datos1")
     public String datosUsuarioGet(Model modelo, @ModelAttribute("datosUsuario") DatosUsuario datosUsuario, HttpSession sesion) {
         if(sesion.getAttribute("datosUsuario")!=null){
             modelo.addAttribute("datosUsuario", sesion.getAttribute("datosUsuario"));}
         return "datosusuario";
     }
-
+    //manda la información del usuario si el usuario no está en el sistema previamente
     @PostMapping("datos1")
     public String datosUsuarioPost(@Valid @ModelAttribute("datosUsuario") DatosUsuario datosUsuario,
                                      BindingResult resultadoVinculacion, HttpSession sesion) {
@@ -68,6 +80,8 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         sesion.setAttribute("datosUsuario", datosUsuario);
         return "redirect:/datos2";
     }
+
+    //devuelve el formulario de datos personales
     @GetMapping("datos2")
     public String datosPersonalesGet(Model modelo, @ModelAttribute("datosPersonales") DatosPersonales datosPersonales, HttpSession sesion) {
         if(sesion.getAttribute("datosPersonales")!=null){
@@ -75,6 +89,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "datospersonales";
     }
 
+    // envia la información de los datos personales si están completos
     @PostMapping("datos2")
     public String datosPersonalesPost(@Valid @ModelAttribute("datosPersonales") DatosPersonales datosPersonales,
                                       BindingResult resultadoVinculacion, HttpSession sesion) {
@@ -86,6 +101,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "redirect:/datos3";
     }
 
+//muestra el formulario de datos profesionales
     @GetMapping("datos3")
     public String datosProfesionales(Model modelo,
                                      @ModelAttribute("datosProfesionales") DatosProfesionales datosProfesionales, HttpSession sesion) {
@@ -95,6 +111,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "datosprofesionales";
     }
 
+    // envia la información de los datos profesionales si están completos
     @PostMapping("datos3")
     public String datosProfesionalesPost(@Valid @ModelAttribute("datosProfesionales")DatosProfesionales datosProfesionales,
                                          BindingResult resultadoVinculacion, HttpSession sesion) {
@@ -105,6 +122,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "redirect:/resumen";
     }
 
+    //devuelve la vista de resumen
     @GetMapping("resumen")
     public String resumen(Model modelo, HttpSession sesion) {
         if(sesion.getAttribute("datosPersonales")!=null){
@@ -120,6 +138,8 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
 
         return "resumen";
     }
+
+    //crea el usuario si los parámetros están completos
     @PostMapping("resumen")
     public String resumenPost(Model modelo, HttpSession sesion, DatosUsuario usuario){
         try{
@@ -145,11 +165,15 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         }
         return "resumen";
     }
+
+    //destruye la sesión y vuelve al inicio
     @GetMapping("masacre")
     public String masacre(HttpSession session){
         session.invalidate();
         return "redirect:/datos1";
     }
+
+    //devuelve la vista para comprobar el usuario
     @GetMapping("paso1")
     public String paso1Get(Model modelo, ArrayList<String> usuariosIniciados,
                            @CookieValue(name = "credenciales", defaultValue = "") String credenciales, HttpSession sesion){
@@ -171,6 +195,8 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         }
         return "inicio-usuario";
     }
+
+    //comprueba el usuario
     @PostMapping("paso1")
     public String paso1Post(Model modelo,
                             @RequestParam String usuario,
@@ -195,11 +221,14 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "redirect:/paso1";
     }
 
+    //reenvia a comprobar la clave
     @GetMapping("paso2")
     public String paso2Get(){
 
         return "inicio-clave";
     }
+
+    //comprueba la clave
     @PostMapping("paso2")
     public String paso2Post(Model modelo,
                             @RequestParam String clave,
@@ -225,6 +254,8 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
 
         return "inicio-clave";
     }
+
+    //devuelve el área Personal
     @GetMapping("devolver")
     public String devolver(Model modelo , HttpSession sesion, HttpServletResponse respuestaHttp,
                            @CookieValue(name = "credenciales", defaultValue = "") String credenciales){
@@ -247,10 +278,14 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
 
         return "inicio-completado";
     }
+
+    //método que redirige a la vista de paso1, saliendo de la sesión
     @PostMapping("devolver")
     public String devolverPost(){
         return"redirect:/paso1";
     }
+
+    //método para manipular la cookie
     public static String contenidoCookie(String credenciales, HttpSession sesion){
         StringBuilder texto= new StringBuilder();
         HashMap<String, Integer> usuarios= new HashMap<>();
