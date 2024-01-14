@@ -52,14 +52,14 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return getUsuarios();
     }
     @GetMapping("datos1")
-    public String datosBancarios(Model modelo, @ModelAttribute("datosUsuario") DatosUsuario datosUsuario, HttpSession sesion) {
+    public String datosUsuarioGet(Model modelo, @ModelAttribute("datosUsuario") DatosUsuario datosUsuario, HttpSession sesion) {
         if(sesion.getAttribute("datosUsuario")!=null){
             modelo.addAttribute("datosUsuario", sesion.getAttribute("datosUsuario"));}
         return "datosusuario";
     }
 
     @PostMapping("datos1")
-    public String datosBancariosPost(@Valid @ModelAttribute("datosUsuario") DatosUsuario datosUsuario,
+    public String datosUsuarioPost(@Valid @ModelAttribute("datosUsuario") DatosUsuario datosUsuario,
                                      BindingResult resultadoVinculacion, HttpSession sesion) {
 
         if (resultadoVinculacion.hasErrors()) {
@@ -69,7 +69,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return "redirect:/datos2";
     }
     @GetMapping("datos2")
-    public String datosPersonales(Model modelo, @ModelAttribute("datosPersonales") DatosPersonales datosPersonales, HttpSession sesion) {
+    public String datosPersonalesGet(Model modelo, @ModelAttribute("datosPersonales") DatosPersonales datosPersonales, HttpSession sesion) {
         if(sesion.getAttribute("datosPersonales")!=null){
             modelo.addAttribute("datosPersonales", sesion.getAttribute("datosPersonales"));}
         return "datospersonales";
@@ -167,7 +167,6 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
                String[] datosUsuario = usuario.split(":");
                usuariosIniciados.add(datosUsuario[0]);
            }
-            System.out.println(usuariosIniciados + " ey" );
            modelo.addAttribute("usuariosIniciados", usuariosIniciados);
         }
         return "inicio-usuario";
@@ -253,7 +252,7 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
         return"redirect:/paso1";
     }
     public static String contenidoCookie(String credenciales, HttpSession sesion){
-        String texto="";
+        StringBuilder texto= new StringBuilder();
         HashMap<String, Integer> usuarios= new HashMap<>();
         String[] partesCredenciales = credenciales.split("#");
 
@@ -267,10 +266,10 @@ private Map<String, DatosUsuario>devuelveUsuarios(){
             usuarios.put((String)sesion.getAttribute("usuario"), usuarios.get((String) sesion.getAttribute("usuario"))+1);
         }
         for(Map.Entry<String, Integer>usuario1 : usuarios.entrySet()){
-            texto += usuario1.getKey() +":"+usuario1.getValue()+"#";
+            texto.append(usuario1.getKey()).append(":").append(usuario1.getValue()).append("#");
             sesion.setAttribute(usuario1.getKey(), usuario1.getValue());
         }
         sesion.setAttribute("usuariosIniciados",usuarios);
-        return texto;
+        return texto.toString();
     }
 }

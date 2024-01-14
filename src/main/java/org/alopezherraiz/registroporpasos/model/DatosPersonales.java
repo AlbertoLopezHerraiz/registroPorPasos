@@ -26,4 +26,11 @@ public class DatosPersonales {
     private ArrayList<String> extrasSeleccionados;
     @Size(min = 2)
     private ArrayList<String> nacionalidadesSeleccionadas;
+
+    public DatosPersonales(String tratamientoSeleccionado, String nombre, String apellidos) {
+        this.tratamientoSeleccionado = tratamientoSeleccionado;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+
+    }
 }

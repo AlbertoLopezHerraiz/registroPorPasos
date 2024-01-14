@@ -35,7 +35,10 @@ public class Colecciones {
         TRATAMIENTO.put("Cabo.", "Caballero");
         TRATAMIENTO.put("Amza.", "Amazona");
         TRATAMIENTO.put("Amzo.", "Amazono");
-
+       //usuario de prueba para testear el login
+        USUARIOS.put("root", new DatosUsuario("root", "root", "root",
+                new DatosPersonales("root","root", "root"),
+                new DatosProfesionales()));
     }
 
     public static Map<String, String> getGeneros(){
